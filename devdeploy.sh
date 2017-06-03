@@ -13,6 +13,10 @@ function generate_ssl {
 
 function build {
     cd frontend
+	#is npm installed?
+	if ! [ -d "./node_modules" ]; then
+		npm install
+	fi
     npm run build:prod
     cd ../backend
     mvn deploy
