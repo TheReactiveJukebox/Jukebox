@@ -11,14 +11,8 @@ services:
     ports:
       - 443:443
   frontend:
-    build: 
-      context: frontend/
-      dockerfile: Dockerfile.dev
+    build: frontend/
   backend:
-    build:
-      context: backend/
-      dockerfile: Dockerfile.dev
-    volumes:
-      - "./backend/target/server.war:/usr/local/tomcat/webapps/ROOT.war"
+    build: backend/
   files:
     build: music-server/

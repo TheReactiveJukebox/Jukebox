@@ -28,7 +28,7 @@ function build_frontend {
     fi
 
     # run build script
-    npm run build:prod
+    npm run build:dev
     cd ..
 }
 
