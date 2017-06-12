@@ -20,5 +20,10 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - "./backend/target/server.war:/usr/local/tomcat/webapps/ROOT.war"
+    ports:
+      - "8000:8000"
+    environment:
+      # y: wait for debugger to connect, n: run immediately
+      JPDA_SUSPEND: n
   files:
     build: music-server/
