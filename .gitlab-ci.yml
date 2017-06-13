@@ -1,0 +1,21 @@
+variables:
+  - GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - build
+  - test
+  - deploy
+
+build_containers:
+  - stage: build
+  - only: master
+  - script: docker-compose -f docker-compose.yml.dev build
+
+push_to_registry:
+  - stage: deploy
+  - only: master
+  - script:
+    - docker push jukebox_web
+    - docker push jukebox_files
+    - docker push jukebox_frontend
+    - docker push jukebox_backend
