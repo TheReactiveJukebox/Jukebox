@@ -35,6 +35,7 @@ function build_frontend {
 # Builds the backend from source
 function build_backend {
     cd backend
+    mvn compiler:compile	
     mvn war:war
     cd ..
 }
