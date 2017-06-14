@@ -11,9 +11,19 @@ services:
     ports:
       - 443:443
   frontend:
-    build: 
+    build:
       context: frontend/
       dockerfile: Dockerfile.dev
+    volumes:
+      - "./frontend/src:/app/src"
+      - "./frontend/config:/app/config"
+      - "./frontend/startdebug.sh:/app/startdebug.sh"
+      - "./frontend/protractor.conf.js:/app/protractor.conf.js"
+      - "./frontend/tsconfig.json:/app/tsconfig.json"
+      - "./frontend/tsconfig.webpack.json:/app/tsconfig.webpack.json"
+      - "./frontend/tslint.json:/app/tslint.json"
+      - "./frontend/typedoc.json:/app/typedoc.json"
+      - "./frontend/webpack.config.js:/app/webpack.config.js"
   backend:
     build:
       context: backend/
@@ -27,3 +37,5 @@ services:
       JPDA_SUSPEND: n
   files:
     build: music-server/
+volumes:
+  node_modules:
