@@ -28,14 +28,14 @@ function build_frontend {
     fi
 
     # run build script
-    npm run build:prod
+    npm run build:dev
     cd ..
 }
 
 # Builds the backend from source
 function build_backend {
     cd backend
-    mvn compiler:compile	
+    mvn compiler:compile
     mvn war:war
     cd ..
 }
