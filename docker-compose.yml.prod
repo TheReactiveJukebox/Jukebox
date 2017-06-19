@@ -1,0 +1,18 @@
+version: "3"
+services:
+  web:
+    build: reverse-proxy/
+    volumes:
+      - "./ssl:/etc/nginx/ssl"
+    depends_on:
+      - backend
+      - frontend
+      - files
+    ports:
+      - 443:443
+  frontend:
+    build: frontend/
+  backend:
+    build: backend/
+  files:
+    build: music-server/
