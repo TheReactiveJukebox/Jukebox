@@ -40,5 +40,3 @@ services:
     build: database/
   files:
     build: music-server/
-volumes:
-  node_modules:
