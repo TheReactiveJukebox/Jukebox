@@ -8,6 +8,7 @@ services:
       - backend
       - frontend
       - files
+      - database
     ports:
       - 443:443
   frontend:
@@ -35,6 +36,8 @@ services:
     environment:
       # y: wait for debugger to connect, n: run immediately
       JPDA_SUSPEND: n
+  database:
+    build: database/
   files:
     build: music-server/
 volumes:
