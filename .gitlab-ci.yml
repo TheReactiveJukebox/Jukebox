@@ -10,6 +10,7 @@ build_containers:
   stage: build
   only:
     - master
+    - ft/gitlab_ci
   script:
     - docker-compose -f docker-compose.yml.dev build
 
