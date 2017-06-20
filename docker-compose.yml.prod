@@ -16,3 +16,5 @@ services:
     build: backend/
   files:
     build: music-server/
+    volumes:
+      - "/home/pguser/music:/etc/nginx/html"
