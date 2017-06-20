@@ -35,7 +35,7 @@ if ! [ -f ./ssl/ssl.crt ] || ! [ -f ./ssl/ssl.key ]; then
     generate_ssl
 fi
 if ! [ -f ./backend/target/server.war ]; then
-    build_frontend
+    build_backend
 fi
 
 deploy
