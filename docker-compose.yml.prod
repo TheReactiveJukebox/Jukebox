@@ -8,12 +8,15 @@ services:
       - backend
       - frontend
       - files
+      - database
     ports:
-      - 443:443
+      - 4799:443
   frontend:
     build: frontend/
   backend:
     build: backend/
+  database:
+    build: database/
   files:
     build: music-server/
     volumes:
