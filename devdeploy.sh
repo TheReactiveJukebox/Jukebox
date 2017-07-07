@@ -26,14 +26,43 @@ build_backend() {
     cd ..
 }
 
+clean () {
+	docker kill $(docker ps -q)
+	docker rm $(docker ps -a -q)
+	docker rmi $(docker images -q)
+	yes | docker volume prune
+	cd backend
+	if [ -d target ]; then
+		rm -rf target
+	fi
+	cd ..
+}
+
+down () {
+    docker-compose -f docker-compose.yml.dev down
+}
+
 # Deploys using docker compose. Will build images if necessary.
 deploy() {
     docker-compose -f docker-compose.yml.dev up --build  
 }
 
+# Generate ssl certificate, if needed
 if ! [ -f ./ssl/ssl.crt ] || ! [ -f ./ssl/ssl.key ]; then
     generate_ssl
 fi
+
+# clean docker cache and backend target
+if [ $# == 1 ] && [ $1 == clean ]; then
+	clean
+fi
+
+# shoutdown docker containers
+if [ $# == 1 ] && [ $1 == down ]; then
+	down
+	exit
+fi
+
 if ! [ -f ./backend/target/server.war ]; then
     build_backend
 fi
