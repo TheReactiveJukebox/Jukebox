@@ -27,9 +27,9 @@ build_backend() {
 }
 
 clean () {
-	docker kill $(docker ps -q)
-	docker rm $(docker ps -a -q)
-	docker rmi $(docker images -q)
+	down
+	yes | docker container prune
+	docker images | grep jukebox | awk '{ print $1 }' | xargs docker rmi
 	yes | docker volume prune
 	cd backend
 	if [ -d target ]; then
