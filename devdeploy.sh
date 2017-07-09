@@ -44,20 +44,27 @@ deploy() {
     docker-compose -f docker-compose.yml.dev up --build  
 }
 
+case $1 in
+clean)
+    # clean docker cache and backend target
+    clean
+;;
+down)
+    # shoutdown docker containers
+    down
+    exit 0
+;;
+*)
+    if [ -n "$1" ]
+    then
+        echo "usage: $0 [clean|down]" >&2
+        exit 1
+    fi
+;;
+esac
 # Generate ssl certificate, if needed
 if ! [ -f ./ssl/ssl.crt ] || ! [ -f ./ssl/ssl.key ]; then
     generate_ssl
-fi
-
-# clean docker cache and backend target
-if [ $# == 1 ] && [ $1 == clean ]; then
-    clean
-fi
-
-# shoutdown docker containers
-if [ $# == 1 ] && [ $1 == down ]; then
-	down
-	exit
 fi
 
 if ! [ -f ./backend/target/server.war ]; then
