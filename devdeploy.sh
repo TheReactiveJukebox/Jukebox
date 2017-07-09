@@ -28,9 +28,9 @@ build_backend() {
 
 clean () {
     down
-    yes | docker container prune
+    docker container prune --force
     docker images "jukebox_*" --format='{{.Repository}}' | xargs --no-run-if-empty docker rmi
-    yes | docker volume prune
+    docker volume prune --force
     cd backend
     if [ -d target ]; then
         rm -rf target
