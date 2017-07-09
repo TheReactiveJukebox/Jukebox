@@ -31,11 +31,8 @@ clean () {
     docker container prune --force
     docker images "jukebox_*" --format='{{.Repository}}' | xargs --no-run-if-empty docker rmi
     docker volume prune --force
-    cd backend
-    if [ -d target ]; then
-        rm -rf target
-    fi
-    cd ..
+
+    rm -rf ./backend/target
 }
 
 down () {
