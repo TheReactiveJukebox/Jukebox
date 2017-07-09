@@ -27,15 +27,15 @@ build_backend() {
 }
 
 clean () {
-	down
-	yes | docker container prune
-	docker images | grep jukebox | awk '{ print $1 }' | xargs docker rmi
-	yes | docker volume prune
-	cd backend
-	if [ -d target ]; then
-		rm -rf target
-	fi
-	cd ..
+    down
+    yes | docker container prune
+    docker images | grep jukebox | awk '{ print $1 }' | xargs docker rmi
+    yes | docker volume prune
+    cd backend
+    if [ -d target ]; then
+        rm -rf target
+    fi
+    cd ..
 }
 
 down () {
@@ -54,7 +54,7 @@ fi
 
 # clean docker cache and backend target
 if [ $# == 1 ] && [ $1 == clean ]; then
-	clean
+    clean
 fi
 
 # shoutdown docker containers
