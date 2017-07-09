@@ -29,7 +29,7 @@ build_backend() {
 clean () {
     down
     yes | docker container prune
-    docker images | grep jukebox | awk '{ print $1 }' | xargs --no-run-if-empty docker rmi
+    docker images "jukebox_*" --format='{{.Repository}}' | xargs --no-run-if-empty docker rmi
     yes | docker volume prune
     cd backend
     if [ -d target ]; then
