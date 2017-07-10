@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Deployment script to quickly get a jukebox instance running on every machine.
 
@@ -6,7 +6,7 @@
 # All of those need to be available in the shell that is running this script.
 
 # Generates a new SSL certificate in ssl subfolder, which will be mounted by nginx
-function generate_ssl {
+generate_ssl() {
     mkdir -p ssl
     openssl req \
         -x509 \
@@ -19,21 +19,54 @@ function generate_ssl {
 }
 
 # Builds the backend from source
-function build_backend {
+build_backend() {
     cd backend
     mvn compiler:compile
     mvn war:war
     cd ..
 }
 
+clean () {
+    down
+    docker container prune --force
+    docker images "jukebox_*" --format='{{.Repository}}' | xargs --no-run-if-empty docker rmi
+    docker volume prune --force
+
+    rm -rf ./backend/target
+}
+
+down () {
+    docker-compose -f docker-compose.yml.dev down
+}
+
 # Deploys using docker compose. Will build images if necessary.
-function deploy {
+deploy() {
     docker-compose -f docker-compose.yml.dev up --build  
 }
 
+case $1 in
+clean)
+    # clean docker cache and backend target
+    clean
+;;
+down)
+    # shoutdown docker containers
+    down
+    exit 0
+;;
+*)
+    if [ -n "$1" ]
+    then
+        echo "usage: $0 [clean|down]" >&2
+        exit 1
+    fi
+;;
+esac
+# Generate ssl certificate, if needed
 if ! [ -f ./ssl/ssl.crt ] || ! [ -f ./ssl/ssl.key ]; then
     generate_ssl
 fi
+
 if ! [ -f ./backend/target/server.war ]; then
     build_backend
 fi
