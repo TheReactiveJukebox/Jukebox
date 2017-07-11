@@ -31,6 +31,8 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - "./backend/target/server.war:/usr/local/tomcat/webapps/ROOT.war"
+    depends_on:
+      - database
     ports:
       - "8000:8000"
     environment:

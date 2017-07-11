@@ -28,7 +28,7 @@ function build_frontend {
     fi
 
     # run build script
-    npm run build:prod
+    npm run build:aot:prod
     cd ..
 }
 
@@ -40,10 +40,39 @@ function build_backend {
     cd ..
 }
 
+clean () {
+    down
+    docker container prune --force
+    docker images "jukebox_*" --format='{{.Repository}}' | xargs --no-run-if-empty docker rmi
+    docker volume prune --force
+
+    rm -rf ./backend/target
+}
+
 # Deploys using docker compose. Will build images if necessary.
 function deploy {
     docker-compose -f docker-compose.yml.prod up --build  
 }
+
+
+case $1 in
+clean)
+    # clean docker cache and backend target
+    clean
+;;
+down)
+    # shoutdown docker containers
+    down
+    exit 0
+;;
+*)
+    if [ -n "$1" ]
+    then
+        echo "usage: $0 [clean|down]" >&2
+        exit 1
+    fi
+;;
+esac
 
 if ! [ -f ./ssl/ssl.crt ] || ! [ -f ./ssl/ssl.key ]; then
     generate_ssl

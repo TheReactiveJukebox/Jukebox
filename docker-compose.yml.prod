@@ -15,6 +15,8 @@ services:
     build: frontend/
   backend:
     build: backend/
+    depends_on:
+      - database
   database:
     build: database/
   files:
