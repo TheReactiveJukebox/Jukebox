@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Deployment script to quickly get a jukebox instance running on every machine.
 
@@ -6,7 +6,7 @@
 # All of those need to be available in the shell that is running this script.
 
 # Generates a new SSL certificate in ssl subfolder, which will be mounted by nginx
-generate_ssl() {
+function generate_ssl {
     mkdir -p ssl
     openssl req \
         -x509 \
@@ -19,7 +19,21 @@ generate_ssl() {
 }
 
 # Builds the backend from source
-build_backend() {
+function build_frontend {
+    cd frontend
+
+    # install dependencies if necessary
+    if ! [ -d "./node_modules" ]; then
+        npm install
+    fi
+
+    # run build script
+    npm run build:aot:prod
+    cd ..
+}
+
+# Builds the backend from source
+function build_backend {
     cd backend
     mvn compiler:compile
     mvn war:war
@@ -35,14 +49,11 @@ clean () {
     rm -rf ./backend/target
 }
 
-down () {
-    docker-compose -f docker-compose.yml.dev down
+# Deploys using docker compose. Will build images if necessary.
+function deploy {
+    docker-compose -f docker-compose.yml.prod up --build  
 }
 
-# Deploys using docker compose. Will build images if necessary.
-deploy() {
-    docker-compose -f docker-compose.yml.dev up --build  
-}
 
 case $1 in
 clean)
@@ -62,13 +73,12 @@ down)
     fi
 ;;
 esac
-# Generate ssl certificate, if needed
+
 if ! [ -f ./ssl/ssl.crt ] || ! [ -f ./ssl/ssl.key ]; then
     generate_ssl
 fi
-
-if ! [ -f ./backend/target/server.war ]; then
+    build_frontend
     build_backend
-fi
+
 
 deploy

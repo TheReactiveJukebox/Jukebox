@@ -8,11 +8,39 @@ services:
       - backend
       - frontend
       - files
+      - database
     ports:
       - 443:443
   frontend:
-    build: frontend/
+    build:
+      context: frontend/
+      dockerfile: Dockerfile.dev
+    volumes:
+      - "./frontend/src:/app/src"
+      - "./frontend/config:/app/config"
+      - "./frontend/startdebug.sh:/app/startdebug.sh"
+      - "./frontend/protractor.conf.js:/app/protractor.conf.js"
+      - "./frontend/tsconfig.json:/app/tsconfig.json"
+      - "./frontend/tsconfig.webpack.json:/app/tsconfig.webpack.json"
+      - "./frontend/tslint.json:/app/tslint.json"
+      - "./frontend/typedoc.json:/app/typedoc.json"
+      - "./frontend/webpack.config.js:/app/webpack.config.js"
   backend:
-    build: backend/
+    build:
+      context: backend/
+      dockerfile: Dockerfile.dev
+    volumes:
+      - "./backend/target/server.war:/usr/local/tomcat/webapps/ROOT.war"
+    depends_on:
+      - database
+    ports:
+      - "8000:8000"
+    environment:
+      # y: wait for debugger to connect, n: run immediately
+      JPDA_SUSPEND: n
+  database:
+    build: database/
   files:
-    build: music-server/
+    build:
+      context: music-server/
+      dockerfile: Dockerfile.dev

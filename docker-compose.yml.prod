@@ -1,0 +1,25 @@
+version: "3"
+services:
+  web:
+    build: reverse-proxy/
+    volumes:
+      - "./ssl:/etc/nginx/ssl"
+    depends_on:
+      - backend
+      - frontend
+      - files
+      - database
+    ports:
+      - 4799:443
+  frontend:
+    build: frontend/
+  backend:
+    build: backend/
+    depends_on:
+      - database
+  database:
+    build: database/
+  files:
+    build: music-server/
+    volumes:
+      - "/home/pguser/music:/etc/nginx/html"
