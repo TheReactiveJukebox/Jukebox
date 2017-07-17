@@ -19,6 +19,9 @@ services:
       - database
   database:
     build: database/
+    image: postgres:alpine
+    volumes:
+      - "./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
   files:
     build: music-server/
     volumes:

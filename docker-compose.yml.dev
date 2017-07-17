@@ -40,6 +40,10 @@ services:
       JPDA_SUSPEND: n
   database:
     build: database/
+    image: postgres:alpine
+    volumes:
+      - "./database_data:/var/lib/postgresql/data"
+      - "./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
   files:
     build:
       context: music-server/
