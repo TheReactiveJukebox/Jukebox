@@ -39,7 +39,6 @@ services:
       # y: wait for debugger to connect, n: run immediately
       JPDA_SUSPEND: n
   database:
-    build: database/
     image: postgres:alpine
     volumes:
       - "./database_data:/var/lib/postgresql/data"
