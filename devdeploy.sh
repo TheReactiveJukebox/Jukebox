@@ -40,12 +40,12 @@ clean () {
 
 # Runs docker-compose down
 down () {
-    docker-compose -f $COMPOSE_FILE down
+    docker-compose -f "$COMPOSE_FILE" down
 }
 
 # Deploys using docker compose. Will build images if necessary.
 deploy() {
-    docker-compose -f $COMPOSE_FILE up --build  
+    docker-compose -f "$COMPOSE_FILE" up --build  
 }
 
 case $1 in
