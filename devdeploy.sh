@@ -5,6 +5,8 @@
 # Dependencies: openssl, maven, docker, docker-compose
 # All of those need to be available in the shell that is running this script.
 
+COMPOSE_FILE=docker-compose.yml
+
 # Generates a new SSL certificate in ssl subfolder, which will be mounted by nginx
 generate_ssl() {
     mkdir -p ssl
@@ -26,6 +28,7 @@ build_backend() {
     cd ..
 }
 
+# Removes containers, images, cache, volumes, compiled java app.
 clean () {
     down
     docker container prune --force
@@ -35,13 +38,14 @@ clean () {
     rm -rf ./backend/target
 }
 
+# Runs docker-compose down
 down () {
-    docker-compose -f docker-compose.yml.dev down
+    docker-compose -f "$COMPOSE_FILE" down
 }
 
 # Deploys using docker compose. Will build images if necessary.
 deploy() {
-    docker-compose -f docker-compose.yml.dev up --build  
+    docker-compose -f "$COMPOSE_FILE" up --build  
 }
 
 case $1 in
@@ -50,7 +54,7 @@ clean)
     clean
 ;;
 down)
-    # shoutdown docker containers
+    # shutdown docker containers
     down
     exit 0
 ;;
