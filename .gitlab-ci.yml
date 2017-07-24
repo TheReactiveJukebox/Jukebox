@@ -12,7 +12,7 @@ build_containers:
     - master
     - ft/gitlab_ci
   script:
-    - docker-compose -f docker-compose.yml.dev build
+    - docker-compose build
 
 push_to_registry:
   stage: deploy
