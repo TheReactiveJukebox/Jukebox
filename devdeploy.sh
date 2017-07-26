@@ -37,7 +37,6 @@ clean () {
     docker volume prune --force
 
     rm -rf ./backend/target
-    sudo rm -rf ./database_data
 }
 
 # Runs docker-compose down
