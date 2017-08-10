@@ -3,26 +3,109 @@ variables:
 
 stages:
   - build
-  - test
+  - build_image
   - deploy
 
-before_script:
-  - docker info
+variables:
+  IMAGE_NAME_BACKEND: $CI_REGISTRY/jukebox/jukebox/backend:$CI_COMMIT_REF_SLUG
+  IMAGE_NAME_FRONTEND: $CI_REGISTRY/jukebox/jukebox/frontend:$CI_COMMIT_REF_SLUG
+  IMAGE_NAME_DATABASE: $CI_REGISTRY/jukebox/jukebox/database:$CI_COMMIT_REF_SLUG
+  IMAGE_NAME_MUSIC_SERVER: $CI_REGISTRY/jukebox/jukebox/music-server:$CI_COMMIT_REF_SLUG
+  IMAGE_NAME_REVERSE_PROXY: $CI_REGISTRY/jukebox/jukebox/reverse-proxy:$CI_COMMIT_REF_SLUG
 
-build_containers:
+build_backend:
   stage: build
   only:
     - master
     - ft/gitlab_ci
+  before_script:
+    - cd backend
   script:
-    - docker-compose build
+    - mvn --batch-mode --quiet --fail-at-end compiler:compile war:war
+  artifacts:
+    paths:
+    - target/*.war
+    expire_in: 1 week
 
-push_to_registry:
+build_frontend:
+  stage: build
+  # https://hub.docker.com/_/node/
+  image: node:7-alpine
+  cache:
+    key: "frontend_npm"
+    paths:
+    - .npm/
+  before_script:
+    - cd frontend
+    - npm set cache .npm
+    - npm set fetch-retries 10
+  script:
+    - npm install
+    - npm run build:aot:prod
+  artifacts:
+    paths:
+    - dist/
+
+build_image_backend:
+  stage: build_image
+  only:
+    - master
+    - ft/gitlab_ci
+  before_script:
+    - cd backend
+  script:
+    - docker build --pull -t $IMAGE_NAME_BACKEND .
+
+build_image_frontend:
+  stage: build_image
+  only:
+    - master
+    - ft/gitlab_ci
+  before_script:
+    - cd frontend
+  script:
+    - docker build --pull -t $IMAGE_NAME_FRONTEND .
+
+build_image_database:
+  stage: build_image
+  only:
+    - master
+    - ft/gitlab_ci
+  before_script:
+    - cd database
+  script:
+  - docker build --pull -t $IMAGE_NAME_DATABASE .
+
+build_image_music_server:
+  stage: build_image
+  only:
+    - master
+    - ft/gitlab_ci
+  before_script:
+    - cd music-server
+  script:
+  - docker build --pull -t $IMAGE_NAME_MUSIC_SERVER .
+
+build_image_reverse_proxy:
+  stage: build_image
+  only:
+    - master
+    - ft/gitlab_ci
+  before_script:
+    - cd reverse-proxy
+  script:
+  - docker build --pull -t $IMAGE_NAME_REVERSE_PROXY .
+
+push_images_to_registry:
   stage: deploy
   only:
     - master
+    - ft/gitlab_ci
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    - docker push jukebox_web
-    - docker push jukebox_files
-    - docker push jukebox_frontend
-    - docker push jukebox_backend
+    - docker push $IMAGE_NAME_BACKEND
+    - docker push $IMAGE_NAME_FRONTEND
+    - docker push $IMAGE_NAME_DATABASE
+    - docker push $IMAGE_NAME_MUSIC_SERVER
+    - docker push $IMAGE_NAME_REVERSE_PROXY
