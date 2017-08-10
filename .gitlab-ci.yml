@@ -1,12 +1,10 @@
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive
-
 stages:
   - build
   - build_image
   - deploy
 
 variables:
+  GIT_SUBMODULE_STRATEGY: recursive
   IMAGE_NAME_BACKEND: $CI_REGISTRY/jukebox/jukebox/backend:$CI_COMMIT_REF_SLUG
   IMAGE_NAME_FRONTEND: $CI_REGISTRY/jukebox/jukebox/frontend:$CI_COMMIT_REF_SLUG
   IMAGE_NAME_DATABASE: $CI_REGISTRY/jukebox/jukebox/database:$CI_COMMIT_REF_SLUG
