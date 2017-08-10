@@ -39,8 +39,13 @@ services:
       # y: wait for debugger to connect, n: run immediately
       JPDA_SUSPEND: n
   database:
-    build: database/
+    image: postgres:alpine
+    volumes:
+      - "data:/var/lib/postgresql/data"
+      - "./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
   files:
     build:
       context: music-server/
       dockerfile: Dockerfile.dev
+volumes:
+  data:

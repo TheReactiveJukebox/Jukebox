@@ -5,6 +5,8 @@
 # Dependencies: openssl, maven, docker, docker-compose
 # All of those need to be available in the shell that is running this script.
 
+trap "exit 1" ERR
+
 COMPOSE_FILE=docker-compose.yml
 
 # Generates a new SSL certificate in ssl subfolder, which will be mounted by nginx
@@ -23,8 +25,7 @@ generate_ssl() {
 # Builds the backend from source
 build_backend() {
     cd backend
-    mvn compiler:compile
-    mvn war:war
+    mvn compiler:compile war:war
     cd ..
 }
 

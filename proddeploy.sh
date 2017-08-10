@@ -5,6 +5,8 @@
 # Dependencies: openssl, maven, docker, docker-compose
 # All of those need to be available in the shell that is running this script.
 
+trap "exit 1" ERR
+
 # Generates a new SSL certificate in ssl subfolder, which will be mounted by nginx
 function generate_ssl {
     mkdir -p ssl
@@ -35,8 +37,7 @@ function build_frontend {
 # Builds the backend from source
 function build_backend {
     cd backend
-    mvn compiler:compile
-    mvn war:war
+    mvn compiler:compile war:war
     cd ..
 }
 
