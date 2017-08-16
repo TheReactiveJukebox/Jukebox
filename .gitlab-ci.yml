@@ -108,3 +108,5 @@ push_images_to_registry:
     - docker push $IMAGE_NAME_DATABASE
     - docker push $IMAGE_NAME_MUSIC_SERVER
     - docker push $IMAGE_NAME_REVERSE_PROXY
+  after_script:
+    - docker logout $CI_REGISTRY
