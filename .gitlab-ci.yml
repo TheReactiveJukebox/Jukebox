@@ -18,7 +18,7 @@ build_backend:
     - mvn --batch-mode --quiet --fail-at-end compiler:compile war:war
   artifacts:
     paths:
-    - target/*.war
+    - backend/target/*.war
     expire_in: 1 week
 
 build_frontend:
@@ -38,7 +38,7 @@ build_frontend:
     - npm run build:aot:prod
   artifacts:
     paths:
-    - dist/
+    - frontend/dist/
 
 build_images:
   stage: docker
