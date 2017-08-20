@@ -42,6 +42,7 @@ build_frontend:
 
 build_images:
   stage: docker
+  image: tmaier/docker-compose
   only:
     - master
     - ft/gitlab_ci
@@ -51,7 +52,7 @@ build_images:
 
 push_images_to_registry:
   stage: deploy
-  image: docker/compose
+  image: tmaier/docker-compose
   only:
     - master
     - ft/gitlab_ci
@@ -66,7 +67,7 @@ push_images_to_registry:
 
 run_on_server:
   stage: deploy
-  image: docker/compose
+  image: tmaier/docker-compose
   only:
     - master
     - ft/gitlab_ci
