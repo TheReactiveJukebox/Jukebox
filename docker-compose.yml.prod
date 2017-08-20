@@ -4,7 +4,8 @@ services:
     image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/reverse-proxy:${CI_COMMIT_REF_SLUG:-latest}
     build: reverse-proxy/
     volumes:
-      - "./ssl:/etc/nginx/ssl"
+      - "/etc/gitlab/ssl/pg.netz1984.de.crt:/etc/nginx/ssl/ssl.crt"
+      - "/etc/gitlab/ssl/pg.netz1984.de.key:/etc/nginx/ssl/ssl.key"
     depends_on:
       - backend
       - frontend
