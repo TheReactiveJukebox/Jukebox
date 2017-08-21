@@ -75,7 +75,12 @@ run_on_server:
     - ft/gitlab_ci
   dependencies:
     - build_images
+  cache:
+    key: "jukebox-docker-compose_$CI_COMMIT_REF_SLUG"
+    paths:
+    - cache/
   before_script:
-    - docker-compose -f docker-compose.yml.prod down
+    - docker-compose -f ./cache/docker-compose.yml.prod down || docker-compose -f docker-compose.yml.prod down
   script:
     - docker-compose -f docker-compose.yml.prod up -d
+    - cp docker-compose.yml.prod ./cache/docker-compose.yml.prod
