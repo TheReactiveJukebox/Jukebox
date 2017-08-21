@@ -83,4 +83,4 @@ run_on_server:
     - docker-compose -f ./cache/docker-compose.yml.prod down || docker-compose -f docker-compose.yml.prod down
   script:
     - docker-compose -f docker-compose.yml.prod up -d
-    - cp docker-compose.yml.prod ./cache/docker-compose.yml.prod
+    - mkdir -p ./cache && cp docker-compose.yml.prod ./cache/docker-compose.yml.prod
