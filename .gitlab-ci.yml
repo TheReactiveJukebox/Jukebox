@@ -46,7 +46,9 @@ build_images:
   only:
     - master
     - ft/gitlab_ci
-  dependencies: []
+  dependencies:
+    - build_backend
+    - build_frontend
   script:
     - docker-compose -f docker-compose.yml.prod build --pull
 
