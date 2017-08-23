@@ -9,9 +9,6 @@ variables:
 build_backend:
   stage: build
   image: dockette/mvn
-  only:
-    - master
-    - ft/gitlab_ci
   before_script:
     - cd backend
   script:
