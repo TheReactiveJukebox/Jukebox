@@ -45,7 +45,6 @@ build_images:
   image: tmaier/docker-compose
   only:
     - master
-    - ft/gitlab_ci
   dependencies:
     - build_backend
     - build_frontend
@@ -57,7 +56,6 @@ push_images_to_registry:
   image: tmaier/docker-compose
   only:
     - master
-    - ft/gitlab_ci
   dependencies:
     - build_images
   before_script:
@@ -72,7 +70,6 @@ run_on_server:
   image: tmaier/docker-compose
   only:
     - master
-    - ft/gitlab_ci
   dependencies:
     - build_images
   cache:
