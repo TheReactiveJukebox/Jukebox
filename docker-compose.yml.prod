@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/reverse-proxy:${CI_COMMIT_REF_SLUG:-latest}
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/reverse-proxy:latest
     build: reverse-proxy/
     volumes:
       - "/etc/gitlab/ssl/pg.netz1984.de.crt:/etc/nginx/ssl/ssl.crt"
@@ -14,18 +14,18 @@ services:
     ports:
       - 4799:443
   frontend:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/frontend:${CI_COMMIT_REF_SLUG:-latest}
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/frontend:latest
     build: frontend/
   backend:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/backend:${CI_COMMIT_REF_SLUG:-latest}
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/backend:latest
     build: backend/
     depends_on:
       - database
   database:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/database:${CI_COMMIT_REF_SLUG:-latest}
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/database:latest
     build: database/
   files:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/music-server:${CI_COMMIT_REF_SLUG:-latest}
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/music-server:latest
     build: music-server/
     volumes:
       - "/home/pguser/music:/etc/nginx/html"
