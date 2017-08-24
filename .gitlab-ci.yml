@@ -1,0 +1,80 @@
+stages:
+  - build
+  - docker
+  - deploy
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+build_backend:
+  stage: build
+  image: dockette/mvn
+  before_script:
+    - cd backend
+  script:
+    - mvn --batch-mode --quiet --fail-at-end compiler:compile war:war
+  artifacts:
+    paths:
+    - backend/target/*.war
+    expire_in: 1 week
+
+build_frontend:
+  stage: build
+  # https://hub.docker.com/_/node/
+  image: node:7-alpine
+  cache:
+    key: "frontend_npm"
+    paths:
+    - .npm/
+  before_script:
+    - cd frontend
+    - npm set cache .npm
+    - npm set fetch-retries 10
+  script:
+    - npm install
+    - npm run build:aot:prod
+  artifacts:
+    paths:
+    - frontend/dist/
+
+build_images:
+  stage: docker
+  image: tmaier/docker-compose
+  only:
+    - master
+  dependencies:
+    - build_backend
+    - build_frontend
+  script:
+    - docker-compose -f docker-compose.yml.prod build --pull
+
+push_images_to_registry:
+  stage: deploy
+  image: tmaier/docker-compose
+  only:
+    - master
+  dependencies:
+    - build_images
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker-compose -f docker-compose.yml.prod push
+  after_script:
+    - docker logout $CI_REGISTRY
+
+run_on_server:
+  stage: deploy
+  image: tmaier/docker-compose
+  only:
+    - master
+  dependencies:
+    - build_images
+  cache:
+    key: "jukebox-docker-compose_$CI_COMMIT_REF_SLUG"
+    paths:
+    - cache/
+  before_script:
+    - docker-compose -f ./cache/docker-compose.yml.prod down || docker-compose -f docker-compose.yml.prod down
+  script:
+    - docker-compose -f docker-compose.yml.prod up -d
+    - mkdir -p ./cache && cp docker-compose.yml.prod ./cache/docker-compose.yml.prod

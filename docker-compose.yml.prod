@@ -1,9 +1,11 @@
 version: "3"
 services:
   web:
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/reverse-proxy:latest
     build: reverse-proxy/
     volumes:
-      - "./ssl:/etc/nginx/ssl"
+      - "/etc/gitlab/ssl/pg.netz1984.de.crt:/etc/nginx/ssl/ssl.crt"
+      - "/etc/gitlab/ssl/pg.netz1984.de.key:/etc/nginx/ssl/ssl.key"
     depends_on:
       - backend
       - frontend
@@ -12,16 +14,18 @@ services:
     ports:
       - 4799:443
   frontend:
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/frontend:latest
     build: frontend/
   backend:
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/backend:latest
     build: backend/
     depends_on:
       - database
   database:
-    image: postgres:alpine
-    volumes:
-      - "./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/database:latest
+    build: database/
   files:
+    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/music-server:latest
     build: music-server/
     volumes:
       - "/home/pguser/music:/etc/nginx/html"
