@@ -36,7 +36,7 @@ clean () {
     docker images "jukebox_*" --format='{{.Repository}}' | xargs --no-run-if-empty docker rmi
     docker volume prune --force
 
-    rm -rf ./backend/target
+    rm -rf ./backend/target ./backend/logs
 }
 
 # Runs docker-compose down
