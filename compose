@@ -1,0 +1,9 @@
+#!/bin/sh
+export CI_REGISTRY=pg.netz1984.de:4792
+export JUKEBOX_SSL_CERT=./ssl/ssl.cert
+export JUKEBOX_SSL_KEY=./ssl/ssl.key
+export JUKEBOX_PORT=443
+export JUKEBOX_DATA=./data
+export JUKEBOX_MUSIC_PATH=./music
+
+docker-compose -f docker-compose.yml.deploy $@
