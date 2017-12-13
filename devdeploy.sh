@@ -26,6 +26,8 @@ generate_ssl() {
 build_backend() {
     cd backend
     mvn compiler:compile war:war
+    mkdir -p logs
+    touch logs/studie.log
     cd ..
 }
 
