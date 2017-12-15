@@ -26,8 +26,6 @@ generate_ssl() {
 build_backend() {
     cd backend
     mvn compiler:compile war:war
-    mkdir -p logs
-    touch logs/studie.log
     cd ..
 }
 
@@ -77,5 +75,7 @@ fi
 if ! [ -f ./backend/target/server.war ]; then
     build_backend
 fi
+mkdir -p ./backend/logs
+touch ./backend/logs/studie.log
 
 deploy
