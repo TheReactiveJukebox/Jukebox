@@ -38,6 +38,8 @@ function build_frontend {
 function build_backend {
     cd backend
     mvn compiler:compile war:war
+    mkdir -p logs
+    touch logs/studie.log
     cd ..
 }
 
@@ -47,7 +49,7 @@ clean () {
     docker images "jukebox_*" --format='{{.Repository}}' | xargs --no-run-if-empty docker rmi
     docker volume prune --force
 
-    rm -rf ./backend/target
+    rm -rf ./backend/target ./backend/logs
 }
 
 # Deploys using docker compose. Will build images if necessary.
