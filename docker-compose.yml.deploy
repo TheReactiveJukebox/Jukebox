@@ -16,6 +16,8 @@ services:
     image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/frontend:latest
   backend:
     image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/backend:latest
+    volumes:
+      - "${JUKEBOX_LOG}:/usr/local/tomcat/logs/"
     depends_on:
       - database
   database:
