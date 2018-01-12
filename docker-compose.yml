@@ -31,7 +31,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - "./backend/target/server.war:/usr/local/tomcat/webapps/ROOT.war"
-      - "./backend/logs/studie.log:/usr/local/tomcat/logs/studie.log"
+      - "./backend/logs:/usr/local/tomcat/logs"
     depends_on:
       - database
     ports:
