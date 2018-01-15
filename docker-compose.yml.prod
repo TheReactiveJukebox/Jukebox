@@ -28,4 +28,4 @@ services:
     image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/music-server:latest
     build: music-server/
     volumes:
-      - "/mnt/NewHDD/Scripts/Music:/etc/nginx/html"
+      - "/home/pguser/music:/etc/nginx/html"
