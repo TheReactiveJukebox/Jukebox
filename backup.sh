@@ -21,6 +21,7 @@ fi
 if ! /bin/tar --create --one-file-system "$JUKEBOX_LOG" | xz -zc > "$TARGET/log.tar.xz"
 then
 	echo "Error: backup from logs failed." 1>&2
+	exit 2
 fi
 
 exit 0
