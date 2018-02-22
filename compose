@@ -7,4 +7,7 @@ export JUKEBOX_DATA=./data
 export JUKEBOX_MUSIC_PATH=./music
 export JUKEBOX_LOG=./logs
 
+# first make a backup
+./backup.sh
+
 docker-compose -f docker-compose.yml.deploy $@
