@@ -1,0 +1,15 @@
+[submodule "backend"]
+	path = backend
+	url = git@github.com:TheReactiveJukebox/Backend.git
+[submodule "database"]
+	path = database
+	url = git@github.com:TheReactiveJukebox/Database.git
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:TheReactiveJukebox/Frontend.git
+[submodule "music-server"]
+	path = music-server
+	url = git@github.com:TheReactiveJukebox/Music-Server.git
+[submodule "reverse-proxy"]
+	path = reverse-proxy
+	url = git@github.com:TheReactiveJukebox/Reverse-Proxy.git
