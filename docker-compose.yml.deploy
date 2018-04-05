@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/reverse-proxy:latest
+    image: ${CI_REGISTRY}/jukebox/jukebox/reverse-proxy:latest
     volumes:
       - "${JUKEBOX_SSL_CERT}:/etc/nginx/ssl/ssl.crt"
       - "${JUKEBOX_SSL_KEY}:/etc/nginx/ssl/ssl.key"
@@ -13,18 +13,18 @@ services:
     ports:
       - ${JUKEBOX_PORT:-443}:443
   frontend:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/frontend:latest
+    image: ${CI_REGISTRY}/jukebox/jukebox/frontend:latest
   backend:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/backend:latest
+    image: ${CI_REGISTRY}/jukebox/jukebox/backend:latest
     volumes:
       - "${JUKEBOX_LOG}:/usr/local/tomcat/logs/"
     depends_on:
       - database
   database:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/database:latest
+    image: ${CI_REGISTRY}/jukebox/jukebox/database:latest
     volumes:
       - "${JUKEBOX_DATA}:/var/lib/postgresql/data"
   files:
-    image: ${CI_REGISTRY:-pg.netz1984.de:4792}/jukebox/jukebox/music-server:latest
+    image: ${CI_REGISTRY}/jukebox/jukebox/music-server:latest
     volumes:
       - "${JUKEBOX_MUSIC_PATH}:/etc/nginx/html"

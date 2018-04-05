@@ -1,5 +1,5 @@
 #!/bin/sh
-export CI_REGISTRY=pg.netz1984.de:4792
+export CI_REGISTRY=example.com:5000
 export JUKEBOX_SSL_CERT=./ssl/ssl.crt
 export JUKEBOX_SSL_KEY=./ssl/ssl.key
 export JUKEBOX_PORT=443

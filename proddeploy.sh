@@ -5,6 +5,14 @@
 # Dependencies: openssl, maven, docker, docker-compose
 # All of those need to be available in the shell that is running this script.
 
+export CI_REGISTRY=example.com:5000
+export JUKEBOX_SSL_CERT=./ssl/ssl.crt
+export JUKEBOX_SSL_KEY=./ssl/ssl.key
+export JUKEBOX_PORT=443
+export JUKEBOX_DATA=./data
+export JUKEBOX_MUSIC_PATH=./music
+export JUKEBOX_LOG=./logs
+
 trap "exit 1" ERR
 
 # Generates a new SSL certificate in ssl subfolder, which will be mounted by nginx
